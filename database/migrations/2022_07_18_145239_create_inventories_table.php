@@ -18,6 +18,8 @@ return new class extends Migration
             $table->bigInteger('equipment_id')->unsigned();
             $table->bigInteger('quantity');
             $table->timestamps();
+
+            $table->foreign('equipment_id')->references('id')->on('equipment')->onDelete('restrict');
         });
     }
 
