@@ -14,7 +14,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        //
+        return 'I dey!';
     }
 
     /**
@@ -35,9 +35,19 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
+<<<<<<< HEAD
         Department::create($request->only([
             'name'
         ]));
+=======
+        $department = Department::create($request->only([
+            'name'
+        ]));
+
+        return response()->json([
+            'data' => $department
+        ]);
+>>>>>>> 0152b24cad519c3f30f8cf0343e1fd4076aa0668
     }
 
     /**
@@ -48,7 +58,9 @@ class DepartmentController extends Controller
      */
     public function show(Department $department)
     {
-        //
+        return response()->json([
+            'data' => $department
+        ]);
     }
 
     /**

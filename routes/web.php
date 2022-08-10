@@ -18,4 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+<<<<<<< HEAD
+=======
+// Route::get('departments', [DepartmentController::class, 'index'])->name('departments.index');
+>>>>>>> 0152b24cad519c3f30f8cf0343e1fd4076aa0668
 Route::resource('departments', DepartmentController::class);

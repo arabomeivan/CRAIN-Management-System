@@ -12,6 +12,7 @@ class Role extends Model
     use HasFactory;
 
     const ADMIN_ROLE = 'admin';
+<<<<<<< HEAD
     const EMPLOYEE_ROLE = 'employee';
     const SUPPLIER_ROLE = 'supplier';
 
@@ -24,4 +25,6 @@ class Role extends Model
     {
         return $this->hasOne(User::class);
     }
+=======
+>>>>>>> 0152b24cad519c3f30f8cf0343e1fd4076aa0668
 }
