@@ -35,7 +35,9 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Department::create($request->only([
+            'name'
+        ]));
     }
 
     /**
