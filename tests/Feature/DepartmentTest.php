@@ -126,4 +126,45 @@ class DepartmentTest extends TestCase
         //  $this->assertDatabaseCount('departments',1);
 
      }
+
+     public function test_admin_can_delete_department()
+     {
+
+        //Create a user with admin role
+         $admin = User::factory()
+             ->for(Role::factory()->state([
+                 'name' => Role::ADMIN_ROLE
+             ]))
+            ->create();
+
+            //values to be created in department table
+            $params = [
+                'name' => 'Marketing'
+            ];
+
+
+            //logging in as an admin create a department
+            $this->actingAs($admin)
+                ->post(route('departments.store'), $params);
+
+            $this->assertDatabaseCount('departments', 1);
+
+
+            //To update the  first record
+            $department = Department::first();
+
+
+            //acting as admin now try to delete a department by the id
+         $response = $this->actingAs($admin)
+             ->delete(route('departments.destroy', $department->id));
+
+             //check if the response after the request made was succesful
+         $response->assertOk();
+
+
+         //to check if department we selected was deleted
+         $this->assertDatabaseCount('departments', 0);
+
+
+     }
 }

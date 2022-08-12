@@ -35,11 +35,6 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-<<<<<<< HEAD
-        Department::create($request->only([
-            'name'
-        ]));
-=======
         $department = Department::create($request->only([
             'name'
         ]));
@@ -47,7 +42,6 @@ class DepartmentController extends Controller
         return response()->json([
             'data' => $department
         ]);
->>>>>>> 0152b24cad519c3f30f8cf0343e1fd4076aa0668
     }
 
     /**
@@ -83,7 +77,13 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, Department $department)
     {
-        //
+        $department->update($request->only([
+            'name'
+        ]));
+
+        return response()->json([
+            'data' => $department
+        ]);
     }
 
     /**
@@ -94,6 +94,10 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
-        //
+        $department->delete();
+
+        return response()->json([
+            'data' => []
+        ]);
     }
 }
