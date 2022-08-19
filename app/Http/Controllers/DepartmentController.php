@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostDepartment;
+use App\Http\Requests\PutDepartment;
 use App\Models\Department;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Department::class, 'department');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,11 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        return 'I dey!';
+        $departments = Department::all();
+
+        return response()->json([
+            'data' => $departments
+        ]);
     }
 
     /**
@@ -30,10 +41,10 @@ class DepartmentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\PostDepartment  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostDepartment $request)
     {
         $department = Department::create($request->only([
             'name'
@@ -75,7 +86,7 @@ class DepartmentController extends Controller
      * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Department $department)
+    public function update(PutDepartment $request, Department $department)
     {
         $department->update($request->only([
             'name'
