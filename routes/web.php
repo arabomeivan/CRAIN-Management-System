@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\DepartmentController;
 
 /*
@@ -20,3 +22,5 @@ Route::get('/', function () {
 
 // Route::get('departments', [DepartmentController::class, 'index'])->name('departments.index');
 Route::resource('departments', DepartmentController::class);
+Route::resource('users', UserController::class);
+Route::resource('equipment', EquipmentController::class);
