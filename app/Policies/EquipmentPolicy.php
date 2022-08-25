@@ -20,6 +20,7 @@ class EquipmentPolicy
     {
         return $user->hasRole(Role::ADMIN_ROLE);
         return $user->hasRole(Role::EMPLOYEE_ROLE);
+        return $user->hasRole(Role::SUPPLIER_ROLE);
     }
 
     /**
@@ -70,6 +71,7 @@ class EquipmentPolicy
     public function delete(User $user, Equipment $equipment)
     {
         //
+        return $user->hasRole(Role::ADMIN_ROLE);
 
     }
 
