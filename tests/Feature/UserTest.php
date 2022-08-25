@@ -232,7 +232,7 @@ class UserTest extends TestCase
                     $response->assertOk();
 
 
-                    //to check if department we selected was deletedklk
+                    //to check if department we selected was deleted
                     $this->assertDatabaseCount('users', 1);
                 }
 
