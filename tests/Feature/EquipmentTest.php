@@ -41,6 +41,26 @@ class EquipmentTest extends TestCase
         $this->assertDatabaseCount('equipment', 1);
 
     }
+    public function test_employee_can_not_create_equipment()
+    {
+        $employee = User::factory()
+            ->for(Role::factory()->state([
+                'name' => Role::EMPLOYEE_ROLE
+            ]))
+            ->create();
+
+        $params = [
+            'name' => 'Exec'
+        ];
+
+        $response = $this->actingAs($employee)
+            ->post(route('equipment.store'), $params);
+
+        $response->assertForbidden();
+
+        $this->assertDatabaseCount('equipment', 0);
+    }
+
     public function test_admin_can_read_equipment()
     {
 
@@ -152,6 +172,50 @@ public function test_admin_can_read_all_equipment()
         //  $this->assertDatabaseCount('departments',1);
 
     }
+
+    public function test_employee_can_not_update_equipment()
+    {
+
+        //Create a user with admin role
+        $admin = User::factory()
+            ->for(Role::factory()->state([
+                'name' => Role::ADMIN_ROLE
+            ]))
+            ->create();
+
+        $employee = User::factory()
+            ->for(Role::factory()->state([
+                'name' => Role::EMPLOYEE_ROLE
+            ]))
+            ->create();
+
+        //values to be created in department table
+        $params = [
+            'name' => 'Marketing'
+        ];
+
+
+        //logging in as an admin create a department
+        $this->actingAs($admin)
+            ->post(route('equipment.store'), $params);
+
+
+        //To update the  first record
+        $equipment = Equipment::first();
+
+        $updateParams = [
+            'name' => 'Finance'
+        ];
+
+        //acting as employee now try to update a department by the id
+        $response = $this->actingAs($employee)
+            ->put(route('equipment.update', $equipment->id), $updateParams);
+
+        //check if the response after the request made was succesful
+        $response->assertForbidden();
+
+    }
+
 
     public function test_admin_can_delete_equipment()
     {
