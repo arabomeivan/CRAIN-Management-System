@@ -243,7 +243,7 @@ public function test_admin_can_read_all_equipment()
         $equipment = Equipment::first();
 
 
-        //acting as admin now try to delete a department by the id
+        //acting as an admin now try to delete a department by the id
         $response = $this->actingAs($admin)
             ->delete(route('equipment.destroy', $equipment->id));
 
@@ -254,5 +254,26 @@ public function test_admin_can_read_all_equipment()
         //to check if department we selected was deleted
         $this->assertDatabaseCount('equipment', 0);
     }
-}
 
+
+    //testing employee cannot create an equipment
+    public function test_employee_can_not_create_equipment()
+    {
+        $employee = User::factory()
+            ->for(Role::factory()->state([
+                'name' => Role::EMPLOYEE_ROLE
+            ]))
+            ->create();
+
+        $params = [
+            'name' => 'pen'
+        ];
+
+        $response = $this->actingAs($employee)
+            ->post(route('equipment.store'), $params);
+
+        $response->assertForbidden();
+
+        $this->assertDatabaseCount('equipment', 0);
+    }
+}
