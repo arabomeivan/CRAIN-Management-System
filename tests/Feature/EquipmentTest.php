@@ -85,7 +85,8 @@ class EquipmentTest extends TestCase
 
 
 
-        public function test_admin_can_read_equipment(){
+        public function test_admin_can_read_equipment()
+        {
 
         //Create a user with admin role
         $admin = User::factory()
@@ -120,6 +121,7 @@ class EquipmentTest extends TestCase
             $response->assertSee($equipment->id);
             $response->assertSee($equipment->name);
             }
+
         public function test_admin_can_read_all_equipment()
         {
         //Create a user with admin role
