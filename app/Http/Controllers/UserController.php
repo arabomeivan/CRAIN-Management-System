@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Equipment;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class EquipmentController extends Controller
+class UserController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(Equipment::class, 'equipment');
+        $this->authorizeResource(User::class, 'users');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,12 +19,11 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        $equipment = Equipment::all();
+        $user = User::all();
 
         return response()->json([
-            'data' => $equipment
+            'data' => $user
         ]);
-
     }
 
     /**
@@ -33,43 +33,46 @@ class EquipmentController extends Controller
      */
     public function create()
     {
-
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\PostDepartment  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Equipment $request)
+    public function store(User $request)
     {
-        $equipment = Equipment::create($request->only([
+        $user = User::create($request->only([
             'name'
         ]));
+
         return response()->json([
-            'data' => $equipment
+            'data' => $user
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Equipment  $equipment
+     * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function show(Equipment $equipment)
+    public function show(User $user)
     {
-
+        return response()->json([
+            'data' => $user
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Equipment  $equipment
+     * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function edit(Equipment $equipment)
+    public function edit(User $user)
     {
         //
     }
@@ -78,22 +81,32 @@ class EquipmentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Equipment  $equipment
+     * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Equipment $equipment)
+    public function update(Request $request, User $user)
     {
-        //
+        $user->update($request->only([
+            'name'
+        ]));
+
+        return response()->json([
+            'data' => $user
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Equipment  $equipment
+     * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Equipment $equipment)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return response()->json([
+            'data' => []
+        ]);
     }
 }

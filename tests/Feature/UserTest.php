@@ -39,6 +39,7 @@ class UserTest extends TestCase
 
         $this->assertDatabaseCount("users", 2);
     }
+
     public function test_admin_can_read_employee()
     {
 
