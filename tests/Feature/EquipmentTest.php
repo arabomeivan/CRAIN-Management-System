@@ -22,23 +22,22 @@ class EquipmentTest extends TestCase
 
         //using the factory we're creating a row in users table called admin
         $admin = User::factory()
-        ->for(Role::factory()->state([
-            'name' => Role::ADMIN_ROLE
-        ]))
-        ->create();
+            ->for(Role::factory()->state([
+                'name' => Role::ADMIN_ROLE
+            ]))
+            ->create();
 
-    $params = [
-        'name' => 'Laptops'
+        $params = [
+            'name' => 'Laptops'
 
-    ];
+        ];
 
         $response = $this->actingAs($admin)
             ->post(route('equipment.store'), $params);
 
-         $response->assertOk();
+        $response->assertOk();
 
         $this->assertDatabaseCount('equipment', 1);
-
     }
 
     public function test_employee_can_not_create_equipment()
@@ -82,20 +81,19 @@ class EquipmentTest extends TestCase
     }
 
 
-
-
-        public function test_admin_can_read_equipment(){
+    public function test_admin_can_read_equipment()
+    {
 
         //Create a user with admin role
         $admin = User::factory()
-        ->for(Role::factory()->state([
-        'name' => Role::ADMIN_ROLE
-        ]))
-        ->create();
+            ->for(Role::factory()->state([
+                'name' => Role::ADMIN_ROLE
+            ]))
+            ->create();
 
         //values to be created in department table
         $params = [
-        'name' => 'Finance'
+            'name' => 'Finance'
         ];
 
 
@@ -104,23 +102,24 @@ class EquipmentTest extends TestCase
             ->post(route('equipment.store'), $params);
 
 
-            //To read the  first record
-            $equipment = Equipment::first();
+        //To read the  first record
+        $equipment = Equipment::first();
 
-            //acting as admin now try to read a department by the id
-            $response = $this->actingAs($admin)
+        //acting as admin now try to read a department by the id
+        $response = $this->actingAs($admin)
             ->get(route('equipment.show', $equipment->id));
 
-            //check if the response after the request made was succesful
-            $response->assertOk();
+        //check if the response after the request made was succesful
+        $response->assertOk();
 
 
-            //to check if the department we retrieved is the same as what we are expecting
-            $response->assertSee($equipment->id);
-            $response->assertSee($equipment->name);
-            }
-        public function test_admin_can_read_all_equipment()
-        {
+        //to check if the department we retrieved is the same as what we are expecting
+        $response->assertSee($equipment->id);
+        $response->assertSee($equipment->name);
+    }
+
+    public function test_admin_can_read_all_equipment()
+    {
         //Create a user with admin role
         $admin = User::factory()
             ->for(Role::factory()->state([
@@ -128,279 +127,272 @@ class EquipmentTest extends TestCase
             ]))
             ->create();
 
-            //values to be created in department table
-            $params = [
+        //values to be created in department table
+        $params = [
             ['name' => 'accounting'],
             ['name' => 'cleaning']
-            ];
+        ];
 
-            //logging in as an admin create a department
-            $this->actingAs($admin)
+        //logging in as an admin create a department
+        $this->actingAs($admin)
             ->post(route('equipment.store'), $params[0]);
-            $this->actingAs($admin)
+        $this->actingAs($admin)
             ->post(route('equipment.store'), $params[1]);
 
-            //acting as admin now try to read a department by the id
-            $response = $this->actingAs($admin)
+        //acting as admin now try to read a department by the id
+        $response = $this->actingAs($admin)
             ->get(route('equipment.index'));
 
-            //check if the response after the request made was succesful
-            $response->assertOk();
-            $response->assertSee($params[0]['name']);
-            $response->assertSee($params[1]['name']);
+        //check if the response after the request made was succesful
+        $response->assertOk();
+        $response->assertSee($params[0]['name']);
+        $response->assertSee($params[1]['name']);
 
-            //to check if the department we retrieved is the same as what we are expecting
-            $this->assertDatabaseCount('equipment', 2);
-            }
+        //to check if the department we retrieved is the same as what we are expecting
+        $this->assertDatabaseCount('equipment', 2);
+    }
 
-            public function test_admin_can_update_equipment()
-            {
+    public function test_admin_can_update_equipment()
+    {
 
-             //Create a user with admin role
-                $admin = User::factory()
-                ->for(Role::factory()->state([
+        //Create a user with admin role
+        $admin = User::factory()
+            ->for(Role::factory()->state([
                 'name' => Role::ADMIN_ROLE
-                ]))
-                ->create();
+            ]))
+            ->create();
 
-                //values to be created in department table
-                $params = [
-                'name' => 'Marketing'
-                ];
-
-
-                //logging in as an admin create a department
-                $this->actingAs($admin)
-                ->post(route('equipment.store'), $params);
+        //values to be created in department table
+        $params = [
+            'name' => 'Marketing'
+        ];
 
 
-                //To update the  first record
-                $equipment = Equipment::first();
-
-                $updateParams = [
-                'name' => 'Finance'
-                ];
-
-                //acting as admin now try to update a department by the id
-                $response = $this->actingAs($admin)
-                ->put(route('equipment.update', $equipment->id), $updateParams);
-
-                //check if the response after the request made was succesful
-                $response->assertOk();
+        //logging in as an admin create a department
+        $this->actingAs($admin)
+            ->post(route('equipment.store'), $params);
 
 
-                //to check if the department we retrieved is the same as what we are expecting
-                $response->assertSee($updateParams['name']);
-                //  $this->assertDatabaseCount('departments',1);
+        //To update the  first record
+        $equipment = Equipment::first();
 
-                }
+        $updateParams = [
+            'name' => 'Finance'
+        ];
 
-                public function test_employee_can_not_update_equipment(){
+        //acting as admin now try to update a department by the id
+        $response = $this->actingAs($admin)
+            ->put(route('equipment.update', $equipment->id), $updateParams);
 
-                //Create a user with admin role
-                $admin = User::factory()
-                ->for(Role::factory()->state([
+        //check if the response after the request made was succesful
+        $response->assertOk();
+
+
+        //to check if the department we retrieved is the same as what we are expecting
+        $response->assertSee($updateParams['name']);
+        //  $this->assertDatabaseCount('departments',1);
+
+    }
+
+    public function test_employee_can_not_update_equipment()
+    {
+
+        //Create a user with admin role
+        $admin = User::factory()
+            ->for(Role::factory()->state([
                 'name' => Role::ADMIN_ROLE
-                ]))
-                ->create();
+            ]))
+            ->create();
 
-                $employee = User::factory()
-                ->for(Role::factory()->state([
+        $employee = User::factory()
+            ->for(Role::factory()->state([
                 'name' => Role::EMPLOYEE_ROLE
-                ]))
-                ->create();
+            ]))
+            ->create();
 
-                //values to be created in department table
-                $params = [
-                'name' => 'Marketing'
-                ];
-
-
-                //logging in as an admin create a department
-                $this->actingAs($admin)
-                ->post(route('equipment.store'), $params);
+        //values to be created in department table
+        $params = [
+            'name' => 'Marketing'
+        ];
 
 
-                //To update the  first record
-                $equipment = Equipment::first();
-
-             $updateParams = [
-                'name' => 'Finance'
-                ];
-
-                //acting as employee now try to update a department by the id
-                $response = $this->actingAs($employee)
-                ->put(route('equipment.update', $equipment->id), $updateParams);
-
-                //check if the response after the request made was succesful
-                $response->assertForbidden();
-
-                }
-
-                public function test_supplier_can_not_update_equipment(){
-
-                    //Create a user with admin role
-                    $admin = User::factory()
-                    ->for(Role::factory()->state([
-                    'name' => Role::ADMIN_ROLE
-                    ]))
-                    ->create();
-
-                    $supplier = User::factory()
-                    ->for(Role::factory()->state([
-                    'name' => Role::SUPPLIER_ROLE
-                    ]))
-                    ->create();
-
-                    //values to be created in department table
-                    $params = [
-                    'name' => 'Marketing'
-                    ];
+        //logging in as an admin create a department
+        $this->actingAs($admin)
+            ->post(route('equipment.store'), $params);
 
 
-                    //logging in as an admin create a department
-                    $this->actingAs($admin)
-                    ->post(route('equipment.store'), $params);
+        //To update the  first record
+        $equipment = Equipment::first();
 
+        $updateParams = [
+            'name' => 'Finance'
+        ];
 
-                    //To update the  first record
-                    $equipment = Equipment::first();
+        //acting as employee now try to update a department by the id
+        $response = $this->actingAs($employee)
+            ->put(route('equipment.update', $equipment->id), $updateParams);
 
-                 $updateParams = [
-                    'name' => 'Finance'
-                    ];
+        //check if the response after the request made was succesful
+        $response->assertForbidden();
+    }
 
-                    //acting as employee now try to update a department by the id
-                    $response = $this->actingAs($supplier)
-                    ->put(route('equipment.update', $equipment->id), $updateParams);
+    public function test_supplier_can_not_update_equipment()
+    {
 
-                    //check if the response after the request made was succesful
-                    $response->assertForbidden();
-
-                    }
-
-
-                public function test_admin_can_delete_equipment()
-                 {
-                //Create a user with admin role
-                $admin = User::factory()
-                ->for(Role::factory()->state([
+        //Create a user with admin role
+        $admin = User::factory()
+            ->for(Role::factory()->state([
                 'name' => Role::ADMIN_ROLE
-                ]))
-                ->create();
+            ]))
+            ->create();
 
-                //values to be created in department table
-                $params = [
-                'name' => 'Marketing'
-                ];
+        $supplier = User::factory()
+            ->for(Role::factory()->state([
+                'name' => Role::SUPPLIER_ROLE
+            ]))
+            ->create();
 
-
-                //logging in as an admin create a department
-                $this->actingAs($admin)
-                ->post(route('equipment.store'), $params);
-
-                $this->assertDatabaseCount('equipment', 1);
-
-
-                //To update the  first record
-                $equipment = Equipment::first();
+        //values to be created in department table
+        $params = [
+            'name' => 'Marketing'
+        ];
 
 
-                //acting as an admin now try to delete a department by the id
-                $response = $this->actingAs($admin)
-                ->delete(route('equipment.destroy', $equipment->id));
-
-                //check if the response after the request made was succesful
-                $response->assertOk();
+        //logging in as an admin create a department
+        $this->actingAs($admin)
+            ->post(route('equipment.store'), $params);
 
 
-                //to check if department we selected was deleted
-                $this->assertDatabaseCount('equipment', 0);
-                }
+        //To update the  first record
+        $equipment = Equipment::first();
 
-                public function test_employee_can_not_delete_equipment()
-                {
-                //Create a user with admin role
-                $admin = User::factory()
-                ->for(Role::factory()->state([
+        $updateParams = [
+            'name' => 'Finance'
+        ];
+
+        //acting as employee now try to update a department by the id
+        $response = $this->actingAs($supplier)
+            ->put(route('equipment.update', $equipment->id), $updateParams);
+
+        //check if the response after the request made was succesful
+        $response->assertForbidden();
+    }
+
+
+    public function test_admin_can_delete_equipment()
+    {
+        //Create a user with admin role
+        $admin = User::factory()
+            ->for(Role::factory()->state([
                 'name' => Role::ADMIN_ROLE
-                 ]))
-                ->create();
+            ]))
+            ->create();
 
-             $employee = User::factory()
-                ->for(Role::factory()->state([
+        //values to be created in department table
+        $params = [
+            'name' => 'Marketing'
+        ];
+
+
+        //logging in as an admin create a department
+        $this->actingAs($admin)
+            ->post(route('equipment.store'), $params);
+
+        $this->assertDatabaseCount('equipment', 1);
+
+
+        //To update the  first record
+        $equipment = Equipment::first();
+
+
+        //acting as an admin now try to delete a department by the id
+        $response = $this->actingAs($admin)
+            ->delete(route('equipment.destroy', $equipment->id));
+
+        //check if the response after the request made was succesful
+        $response->assertOk();
+
+
+        //to check if department we selected was deleted
+        $this->assertDatabaseCount('equipment', 0);
+    }
+
+    public function test_employee_can_not_delete_equipment()
+    {
+        //Create a user with admin role
+        $admin = User::factory()
+            ->for(Role::factory()->state([
+                'name' => Role::ADMIN_ROLE
+            ]))
+            ->create();
+
+        $employee = User::factory()
+            ->for(Role::factory()->state([
                 'name' => Role::EMPLOYEE_ROLE
-                ]))
-                ->create();
+            ]))
+            ->create();
 
-                //values to be created in department table
-                $params = [
-                'name' => 'Marketing'
-                ];
-
-
-                //logging in as an admin create a department
-                $this->actingAs($admin)
-                ->post(route('equipment.store'), $params);
-
-                $this->assertDatabaseCount('equipment', 1);
+        //values to be created in department table
+        $params = [
+            'name' => 'Marketing'
+        ];
 
 
-                //To update the  first record
-                $equipment = Equipment::first();
+        //logging in as an admin create a department
+        $this->actingAs($admin)
+            ->post(route('equipment.store'), $params);
+
+        $this->assertDatabaseCount('equipment', 1);
 
 
-                //acting as employee now try to delete a department by the id
-                $response = $this->actingAs($employee)
-                ->delete(route('equipment.destroy', $equipment->id));
-
-                //check if the response after the request made was succesful
-                $response->assertForbidden();
+        //To update the  first record
+        $equipment = Equipment::first();
 
 
+        //acting as employee now try to delete a department by the id
+        $response = $this->actingAs($employee)
+            ->delete(route('equipment.destroy', $equipment->id));
+
+        //check if the response after the request made was succesful
+        $response->assertForbidden();
     }
     public function test_supplier_can_not_delete_equipment()
     {
-    //Create a user with admin role
-    $admin = User::factory()
-    ->for(Role::factory()->state([
-    'name' => Role::ADMIN_ROLE
-     ]))
-    ->create();
+        //Create a user with admin role
+        $admin = User::factory()
+            ->for(Role::factory()->state([
+                'name' => Role::ADMIN_ROLE
+            ]))
+            ->create();
 
- $supplier = User::factory()
-    ->for(Role::factory()->state([
-    'name' => Role::SUPPLIER_ROLE
-    ]))
-    ->create();
+        $supplier = User::factory()
+            ->for(Role::factory()->state([
+                'name' => Role::SUPPLIER_ROLE
+            ]))
+            ->create();
 
-    //values to be created in department table
-    $params = [
-    'name' => 'Marketing'
-    ];
-
-
-    //logging in as an admin create a department
-    $this->actingAs($admin)
-    ->post(route('equipment.store'), $params);
-
-    $this->assertDatabaseCount('equipment', 1);
+        //values to be created in department table
+        $params = [
+            'name' => 'Marketing'
+        ];
 
 
-    //To update the  first record
-    $equipment = Equipment::first();
+        //logging in as an admin create a department
+        $this->actingAs($admin)
+            ->post(route('equipment.store'), $params);
+
+        $this->assertDatabaseCount('equipment', 1);
 
 
-    //acting as employee now try to delete a department by the id
-    $response = $this->actingAs($supplier)
-    ->delete(route('equipment.destroy', $equipment->id));
-
-    //check if the response after the request made was succesful
-    $response->assertForbidden();
+        //To update the  first record
+        $equipment = Equipment::first();
 
 
+        //acting as employee now try to delete a department by the id
+        $response = $this->actingAs($supplier)
+            ->delete(route('equipment.destroy', $equipment->id));
 
+        //check if the response after the request made was succesful
+        $response->assertForbidden();
+    }
 }
-}
-
-

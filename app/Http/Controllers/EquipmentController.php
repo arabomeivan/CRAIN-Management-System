@@ -11,11 +11,14 @@ class EquipmentController extends Controller
     {
         $this->authorizeResource(Equipment::class, 'equipment');
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+
     public function index()
     {
         $equipment = Equipment::all();
@@ -44,12 +47,16 @@ class EquipmentController extends Controller
      */
     public function store(Equipment $request)
     {
-        $equipment = Equipment::create($request->only([
-            'name'
-        ]));
-        return response()->json([
-            'data' => $equipment
-        ]);
+
+        {
+            $equipment = Equipment::create($request->only([
+                'name'
+            ]));
+
+            return response()->json([
+                'data' => $equipment
+            ]);
+        }
     }
 
     /**
@@ -60,7 +67,9 @@ class EquipmentController extends Controller
      */
     public function show(Equipment $equipment)
     {
-
+        return response()->json([
+            'data' => $equipment
+        ]);
     }
 
     /**
@@ -83,7 +92,13 @@ class EquipmentController extends Controller
      */
     public function update(Request $request, Equipment $equipment)
     {
-        //
+        $equipment->update($request->only([
+            'name'
+        ]));
+
+        return response()->json([
+            'data' => $equipment
+        ]);
     }
 
     /**
@@ -94,6 +109,11 @@ class EquipmentController extends Controller
      */
     public function destroy(Equipment $equipment)
     {
-        //
+        $equipment->delete();
+
+        return response()->json([
+            'data' => []
+        ]);
+
     }
 }

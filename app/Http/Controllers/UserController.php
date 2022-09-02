@@ -39,13 +39,16 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\PostDepartment  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(User $request)
+    public function store(Request $request)
     {
         $user = User::create($request->only([
-            'name'
+            'name',
+            'password',
+            'role_id',
+            'email'
         ]));
 
         return response()->json([
@@ -56,12 +59,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Department  $department
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(User $user )
     {
-        return response()->json([
+         return response()->json([
             'data' => $user
         ]);
     }
@@ -69,10 +72,10 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Department  $department
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($id)
     {
         //
     }
@@ -81,7 +84,7 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Department  $department
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
@@ -98,7 +101,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Department  $department
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)
