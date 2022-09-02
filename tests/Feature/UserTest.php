@@ -39,6 +39,53 @@ class UserTest extends TestCase
 
         $this->assertDatabaseCount("users", 2);
     }
+    public function test_employee_can_not_create_employee()
+    {
+        $employee = User::factory()
+            ->for(Role::factory()->state([
+                'name' => Role::EMPLOYEE_ROLE
+            ]))
+            ->create();
+
+
+            $params = [
+                'role_id' => $employee->id,
+                'name' => 'Ivan arabome',
+                'email' => 'abc@gmail.com',
+                'password' => '1234'
+        ];
+
+        $response = $this->actingAs($employee)
+        ->post('/users',$params);
+
+        $response->assertForbidden();
+
+        $this->assertDatabaseCount('users', 0);
+    }
+    public function test_supplier_can_not_create_employee()
+    {
+        $supplier = User::factory()
+            ->for(Role::factory()->state([
+                'name' => Role::SUPPLIER_ROLE
+            ]))
+            ->create();
+
+
+            $params = [
+                'role_id' => $supplier->id,
+                'name' => 'Ivan arabome',
+                'email' => 'abc@gmail.com',
+                'password' => '1234'
+        ];
+
+        $response = $this->actingAs($supplier)
+        ->post('/users',$params);
+
+        $response->assertForbidden();
+
+        $this->assertDatabaseCount('users', 0);
+    }
+
     public function test_admin_can_read_employee()
     {
 
@@ -188,6 +235,53 @@ class UserTest extends TestCase
                 //  $this->assertDatabaseCount('departments',1);
 
                 }
+                public function test_employee_can_not_update_employee(){
+
+                    //Create a user with admin role
+                    $admin = User::factory()
+                    ->for(Role::factory()->state([
+                    'name' => Role::ADMIN_ROLE
+                    ]))
+                    ->create();
+
+                    $employeeRole = User::factory()
+                    ->for(Role::factory()->state([
+                    'name' => Role::EMPLOYEE_ROLE
+                    ]))
+                    ->create();
+
+                    //values to be created in department table
+                    $params = [
+                        'role_id' => $employeeRole->id,
+                        'name' => 'Ivan arabome',
+                        'email' => 'abc@gmail.com',
+                        'password' => '1234'
+                    ];
+
+                    //logging in as an admin create a department
+                    $this->actingAs($admin)
+                    ->post('/users',$params);
+
+
+                    //To update the  first record
+                    $users = User::first();
+
+                 $updateParams = [
+                    'role_id' => $employeeRole->id,
+                    'name' => 'Yay',
+                    'email' => 'adbc@gmail.com',
+                    'password' => '12234'
+
+                    ];
+
+                    //acting as employee now try to update a department by the id
+                    $response = $this->actingAs($employeeRole)
+                    ->put(route('users.update', $users->id), $updateParams);
+
+                    //check if the response after the request made was succesful
+                    $response->assertForbidden();
+
+                    }
                 public function test_admin_can_delete_employee()
                 {
                     //Create a user with admin role
@@ -235,6 +329,50 @@ class UserTest extends TestCase
                     //to check if department we selected was deleted
                     $this->assertDatabaseCount('users', 1);
                 }
+                public function test_employee_can_not_delete_employee()
+                {
+                //Create a user with admin role
+                $admin = User::factory()
+                ->for(Role::factory()->state([
+                'name' => Role::ADMIN_ROLE
+                 ]))
+                ->create();
+
+             $employeeRole = User::factory()
+                ->for(Role::factory()->state([
+                'name' => Role::EMPLOYEE_ROLE
+                ]))
+                ->create();
+
+                //values to be created in department table
+                $params = [
+                    'role_id' => $employeeRole->id,
+                    'name' => 'Ivan arabome',
+                    'email' => 'abc@gmail.com',
+                    'password' => '1234'
+                ];
+
+
+                //logging in as an admin create a department
+                $this->actingAs($admin)
+                ->post('/users', $params);
+
+                $this->assertDatabaseCount('users', 3);
+
+
+                //To update the  first record
+                $user = User::first();
+
+
+                //acting as employee now try to delete a department by the id
+                $response = $this->actingAs($employeeRole)
+                ->delete(route('users.destroy', $user->id));
+
+                //check if the response after the request made was succesful
+                $response->assertForbidden();
+
+
+    }
 
 
 

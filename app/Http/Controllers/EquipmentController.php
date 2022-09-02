@@ -10,7 +10,7 @@ class EquipmentController extends Controller
 
     public function __construct()
     {
-        $this->authorizeResource(Department::class, 'department');
+        $this->authorizeResource(Equipment::class, 'equipment');
     }
 
     /**

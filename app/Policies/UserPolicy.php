@@ -1,21 +1,24 @@
 <?php
 
 namespace App\Policies;
+
 use App\Models\Role;
-use App\Models\Equipment;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class EquipmentPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models.
+     * Create a new policy instance.
      *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @return void
      */
+    public function __construct()
+    {
+        //
+    }
     public function viewAny(User $user)
     {
         return $user->hasRole(Role::ADMIN_ROLE);
@@ -34,6 +37,7 @@ class EquipmentPolicy
     {
         return $user->hasRole(Role::ADMIN_ROLE);
         return $user->hasRole(Role::EMPLOYEE_ROLE);
+        return $user->hasRole(Role::SUPPLIER_ROLE);
     }
 
     /**
