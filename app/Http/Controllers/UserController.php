@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\PutUser;
+use App\Http\Requests\PostUser;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(User::class, 'users');
+        $this->authorizeResource(User::class, 'user');
     }
 
     /**
@@ -39,10 +41,10 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\PostUser  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostUser $request)
     {
         $user = User::create($request->only([
             'name',
@@ -59,10 +61,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user )
+    public function show(User $user)
     {
          return response()->json([
             'data' => $user
@@ -87,10 +89,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(PutUser $request, User $user)
     {
         $user->update($request->only([
-            'name'
+            'name',
+            'role_id',
+            'email',
+            'password'
         ]));
 
         return response()->json([

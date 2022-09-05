@@ -45,18 +45,16 @@ class EquipmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Equipment $request)
+    public function store(Request $request)
     {
 
-        {
-            $equipment = Equipment::create($request->only([
-                'name'
-            ]));
+        $equipment = Equipment::create($request->only([
+            'name'
+        ]));
 
-            return response()->json([
-                'data' => $equipment
-            ]);
-        }
+        return response()->json([
+            'data' => $equipment
+        ]);
     }
 
     /**
